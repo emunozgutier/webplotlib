@@ -9,8 +9,14 @@ export class Plot {
     private margins = { t: 50, r: 50, b: 50, l: 60 };
     private plotWidth: number = 0;
     private plotHeight: number = 0;
+    private container: HTMLElement;
+    private titleElement?: HTMLDivElement;
 
     constructor(container: HTMLElement, data: Trace[], layout: Layout = {}) {
+        this.container = container;
+        if (window.getComputedStyle(this.container).position === 'static') {
+            this.container.style.position = 'relative';
+        }
         // Handle responsive container or layout sizing
         const width = layout.width || container.clientWidth || 600;
         const height = layout.height || container.clientHeight || 400;
@@ -122,13 +128,74 @@ export class Plot {
         ctx.fillText(this.minY.toFixed(2), this.margins.l - 10, this.mapY(this.minY));
         ctx.fillText(this.maxY.toFixed(2), this.margins.l - 10, this.mapY(this.maxY));
 
-        // Title
-        if (this.layout.title) {
-            ctx.textAlign = "center";
-            ctx.textBaseline = "top";
-            ctx.font = "bold 16px Arial";
-            ctx.fillText(this.layout.title, this.margins.l + this.plotWidth / 2, 15);
+        // Title using DOM overlay
+        this.updateTitleOverlay();
+    }
+
+    private updateTitleOverlay() {
+        if (!this.layout.title) return;
+        
+        if (!this.titleElement) {
+            this.titleElement = document.createElement("div");
+            this.titleElement.style.position = "absolute";
+            this.titleElement.style.top = "15px";
+            this.titleElement.style.font = "bold 16px Arial";
+            this.titleElement.style.color = "#333";
+            this.titleElement.style.padding = "4px 8px";
+            this.titleElement.style.border = "1px solid transparent";
+            this.titleElement.style.borderRadius = "4px";
+            this.titleElement.style.cursor = "pointer";
+            this.titleElement.style.transition = "border-color 0.2s, background-color 0.2s";
+            this.titleElement.style.boxSizing = "border-box";
+            this.titleElement.style.transform = "translateX(-50%)";
+            
+            // Hover effect
+            this.titleElement.addEventListener("mouseenter", () => {
+                if (this.titleElement!.contentEditable !== "true") {
+                    this.titleElement!.style.border = "1px solid #ccc";
+                    this.titleElement!.style.backgroundColor = "rgba(255, 255, 255, 0.8)";
+                }
+            });
+            this.titleElement.addEventListener("mouseleave", () => {
+                if (this.titleElement!.contentEditable !== "true") {
+                    this.titleElement!.style.border = "1px solid transparent";
+                    this.titleElement!.style.backgroundColor = "transparent";
+                }
+            });
+
+            // Click to edit
+            this.titleElement.addEventListener("click", () => {
+                this.titleElement!.contentEditable = "true";
+                this.titleElement!.style.border = "1px solid #0052cc";
+                this.titleElement!.style.backgroundColor = "#fff";
+                this.titleElement!.focus();
+            });
+
+            // Blur to save
+            this.titleElement.addEventListener("blur", () => {
+                this.titleElement!.contentEditable = "false";
+                this.titleElement!.style.border = "1px solid transparent";
+                this.titleElement!.style.backgroundColor = "transparent";
+                this.layout.title = this.titleElement!.innerText;
+            });
+            
+            // Enter to save
+            this.titleElement.addEventListener("keydown", (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    this.titleElement!.blur();
+                }
+            });
+
+            this.container.appendChild(this.titleElement);
         }
+        
+        if (this.titleElement.innerText !== this.layout.title) {
+            this.titleElement.innerText = this.layout.title;
+        }
+        
+        // Update position in case of resize or layout shift
+        this.titleElement.style.left = `calc(${this.margins.l}px + ${this.plotWidth / 2}px)`;
     }
 
     private drawData() {
