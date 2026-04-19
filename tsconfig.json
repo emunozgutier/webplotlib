@@ -10,7 +10,8 @@
     "declaration": true,
     "outDir": "./dist",
     "lib": ["DOM", "ESNext"],
-    "ignoreDeprecations": "6.0"
+    "ignoreDeprecations": "6.0",
+    "jsx": "react-jsx"
   },
   "include": ["src"]
 }

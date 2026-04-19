@@ -29,3 +29,6 @@ export function newPlot(
 export * from "./types";
 export * from "./Plot";
 export * from "./Renderer";
+export * from "./PlotComponents/EditableArea";
+export * from "./PlotComponents/EditableComponents/Title";
+export * from "./PlotComponents/EditableComponents/TitleConfig";
