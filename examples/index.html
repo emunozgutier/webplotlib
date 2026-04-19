@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>webplotlib Test</title>
+    <style>
+        body { font-family: sans-serif; margin: 20px; }
+        #myDiv { width: 800px; height: 500px; border: 1px solid #ccc; }
+    </style>
+</head>
+<body>
+    <h1>webplotlib API Test</h1>
+    <div id="myDiv"></div>
+
+    <!-- Include the built IIFE bundle -->
+    <script src="../dist/index.global.js"></script>
+    <script>
+        // Generate some random scatter data
+        const x = [], y = [];
+        for (let i = 0; i < 500; i++) {
+            x.push(Math.random() * 100);
+            y.push(Math.random() * 100);
+        }
+
+        const data = [{
+            x: x,
+            y: y,
+            mode: 'markers',
+            type: 'scatter',
+            marker: { size: 8, color: '#ff7f0e' }
+        }];
+
+        const layout = {
+            title: 'Scatter Plot directly derived from Plotly API',
+            xaxis: { title: 'X Axis' },
+            yaxis: { title: 'Y Axis' }
+        };
+
+        webplotlib.newPlot('myDiv', data, layout);
+    </script>
+</body>
+</html>
