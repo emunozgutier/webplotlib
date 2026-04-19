@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Title, TitleConfig, Axis, AxisConfig, AxisConfigData, newPlot } from '../src';
+import { Title, TitleConfig, AxisTitle, AxisTitleConfig, newPlot } from '../src';
 
 const DemoApp = () => {
   const plotRef = useRef<HTMLDivElement>(null);
@@ -9,12 +9,10 @@ const DemoApp = () => {
   const [showTitleConfig, setShowTitleConfig] = useState(false);
 
   const [xLabel, setXLabel] = useState("X Axis");
-  const [showXConfig, setShowXConfig] = useState(false);
-  const [xConfig, setXConfig] = useState<AxisConfigData>({ min: 0, max: 6.28, ticks: 10 });
+  const [showXTitleConfig, setShowXTitleConfig] = useState(false);
 
   const [yLabel, setYLabel] = useState("Y Axis");
-  const [showYConfig, setShowYConfig] = useState(false);
-  const [yConfig, setYConfig] = useState<AxisConfigData>({ min: -1, max: 1, ticks: 5 });
+  const [showYTitleConfig, setShowYTitleConfig] = useState(false);
 
   useEffect(() => {
     if (!plotRef.current) return;
@@ -53,20 +51,20 @@ const DemoApp = () => {
           onClose={() => setShowTitleConfig(false)} 
         />
       )}
-      {showXConfig && (
-        <AxisConfig 
+      {showXTitleConfig && (
+        <AxisTitleConfig 
           axisName="Horizontal Axis"
-          config={xConfig} 
-          onConfigChange={setXConfig} 
-          onClose={() => setShowXConfig(false)} 
+          title={xLabel} 
+          onTitleChange={setXLabel} 
+          onClose={() => setShowXTitleConfig(false)} 
         />
       )}
-      {showYConfig && (
-        <AxisConfig 
+      {showYTitleConfig && (
+        <AxisTitleConfig 
           axisName="Vertical Axis"
-          config={yConfig} 
-          onConfigChange={setYConfig} 
-          onClose={() => setShowYConfig(false)} 
+          title={yLabel} 
+          onTitleChange={setYLabel} 
+          onClose={() => setShowYTitleConfig(false)} 
         />
       )}
 
@@ -85,10 +83,10 @@ const DemoApp = () => {
         {/* Center Row: Y Axis (Left) + Plot Canvas */}
         <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
           <div style={{ marginRight: '10px' }}>
-            <Axis 
+            <AxisTitle 
               initialText={yLabel}
               onTextChange={setYLabel}
-              onOpenConfig={() => setShowYConfig(true)}
+              onOpenConfig={() => setShowYTitleConfig(true)}
               orientation="vertical"
             />
           </div>
@@ -98,10 +96,10 @@ const DemoApp = () => {
 
         {/* Bottom: X Axis */}
         <div style={{ marginTop: '10px' }}>
-          <Axis 
+          <AxisTitle 
             initialText={xLabel}
             onTextChange={setXLabel}
-            onOpenConfig={() => setShowXConfig(true)}
+            onOpenConfig={() => setShowXTitleConfig(true)}
             orientation="horizontal"
           />
         </div>

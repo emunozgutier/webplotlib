@@ -35,3 +35,5 @@ export * from "./PlotComponents/EditableComponents/Title";
 export * from "./PlotComponents/EditableComponents/TitleConfig";
 export * from "./PlotComponents/EditableComponents/Axis";
 export * from "./PlotComponents/EditableComponents/AxisConfig";
+export * from "./PlotComponents/EditableComponents/AxisTitle";
+export * from "./PlotComponents/EditableComponents/AxisTitleConfig";
