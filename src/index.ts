@@ -37,3 +37,6 @@ export * from "./PlotComponents/EditableComponents/Axis";
 export * from "./PlotComponents/EditableComponents/AxisConfig";
 export * from "./PlotComponents/EditableComponents/AxisTitle";
 export * from "./PlotComponents/EditableComponents/AxisTitleConfig";
+
+export * from "./stores/useTitleStore";
+export * from "./stores/useAxisStore";

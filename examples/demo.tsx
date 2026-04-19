@@ -1,17 +1,23 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { createRoot } from 'react-dom/client';
-import { Title, TitleConfig, AxisTitle, AxisTitleConfig, newPlot } from '../src';
+import { 
+  Title, TitleConfig, AxisTitle, AxisTitleConfig, newPlot,
+  useTitleStore, useAxisStore 
+} from '../src';
 
 const DemoApp = () => {
   const plotRef = useRef<HTMLDivElement>(null);
   
-  const [title, setTitle] = useState("Sine Wave Example");
+  // Zustand Stores for underlying configuration
+  const { title, setTitle } = useTitleStore();
+  const { 
+    xLabel, setXLabel, xConfig, setXConfig, 
+    yLabel, setYLabel, yConfig, setYConfig 
+  } = useAxisStore();
+
+  // Local state exclusively for UI popover visibility
   const [showTitleConfig, setShowTitleConfig] = useState(false);
-
-  const [xLabel, setXLabel] = useState("X Axis");
   const [showXTitleConfig, setShowXTitleConfig] = useState(false);
-
-  const [yLabel, setYLabel] = useState("Y Axis");
   const [showYTitleConfig, setShowYTitleConfig] = useState(false);
 
   useEffect(() => {
@@ -80,9 +86,14 @@ const DemoApp = () => {
           />
         </div>
 
-        {/* Center Row: Y Axis (Left) + Plot Canvas */}
-        <div style={{ display: 'flex', flexDirection: 'row', alignItems: 'center' }}>
-          <div style={{ marginRight: '10px' }}>
+        {/* Center Row: Plot Canvas + overlapping Y Axis (Left) */}
+        <div style={{ position: 'relative', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          
+          <div style={{ 
+            position: 'absolute', 
+            left: '0px', 
+            zIndex: 10 
+          }}>
             <AxisTitle 
               initialText={yLabel}
               onTextChange={setYLabel}
@@ -95,7 +106,7 @@ const DemoApp = () => {
         </div>
 
         {/* Bottom: X Axis */}
-        <div style={{ marginTop: '10px' }}>
+        <div style={{ marginTop: '0px' }}>
           <AxisTitle 
             initialText={xLabel}
             onTextChange={setXLabel}

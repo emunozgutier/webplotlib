@@ -47,6 +47,21 @@ export const AxisTitle: React.FC<AxisTitleProps> = ({
 
   return (
     <EditableArea onSettingsClick={() => onOpenConfig?.()}>
+      {/* Invisible placeholder ensures the axis container doesn't collapse and shift the plot when editing */}
+      {isEditing && (
+        <div
+          style={{
+            ...commonStyle,
+            visibility: 'hidden',
+            minWidth: isVertical ? 'auto' : '80px',
+            minHeight: isVertical ? '80px' : 'auto',
+            whiteSpace: 'nowrap'
+          }}
+        >
+          {text}
+        </div>
+      )}
+
       {isEditing ? (
         <input
           type="text"
@@ -57,11 +72,19 @@ export const AxisTitle: React.FC<AxisTitleProps> = ({
           autoFocus
           style={{
             ...commonStyle,
+            // Override the vertical styling during edit mode so the user types normally
+            writingMode: 'horizontal-tb',
             border: '1px solid #0052cc',
             background: '#fff',
-            // Need a minimum dimension so it doesn't collapse
-            minWidth: isVertical ? 'auto' : '120px',
-            minHeight: isVertical ? '120px' : 'auto',
+            minWidth: '150px',
+            minHeight: 'auto',
+            // Float it perfectly centered without shifting layout
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+            zIndex: 100
           }}
         />
       ) : (
