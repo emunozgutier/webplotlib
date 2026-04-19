@@ -57,8 +57,8 @@ export const EditableArea: React.FC<EditableAreaProps> = ({
           style={{
             position: 'absolute',
             ...(orientation === 'landscape' 
-              ? { right: '-24px', top: '50%', transform: 'translateY(-50%)' }
-              : { bottom: '-24px', left: '50%', transform: 'translateX(-50%)' }
+              ? { right: '0', top: '50%', transform: 'translate(50%, -50%)' }
+              : { bottom: '0', left: '50%', transform: 'translate(-50%, 50%)' }
             ),
             background: '#fff',
             border: '1px solid #ccc',
