@@ -44,37 +44,51 @@ export const EditableArea: React.FC<EditableAreaProps> = ({
         display: 'inline-block',
         border: `1px dashed ${showOutline ? '#888' : 'transparent'}`,
         transition: 'border-color 0.2s',
+        // Optional: Ensure the wrapper itself can participate in z-index sorting properly
+        zIndex: showOutline ? 100 : 1
       }}
     >
       {children}
       
       {showOutline && (
-        <button
-          onClick={(e) => {
-            e.stopPropagation();
-            onSettingsClick();
-          }}
-          style={{
+        <>
+          {/* Invisible pad extended around the element to catch sloppy mouse movements so hover state isn't lost */}
+          <div style={{
             position: 'absolute',
-            ...(orientation === 'landscape' 
-              ? { right: '0', top: '50%', transform: 'translate(50%, -50%)' }
-              : { bottom: '0', left: '50%', transform: 'translate(-50%, 50%)' }
-            ),
-            background: '#fff',
-            border: '1px solid #ccc',
-            borderRadius: '4px',
-            padding: '2px',
-            cursor: 'pointer',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            boxShadow: '0 1px 3px rgba(0,0,0,0.1)',
-            zIndex: 10
-          }}
-          title="Settings"
-        >
-          <Settings size={14} color="#555" />
-        </button>
+            top: '-20px',
+            left: '-20px',
+            right: orientation === 'landscape' ? '-50px' : '-20px',
+            bottom: orientation === 'portrait' ? '-50px' : '-20px',
+            zIndex: -1
+          }} />
+
+          <button
+            onClick={(e) => {
+              e.stopPropagation();
+              onSettingsClick();
+            }}
+            style={{
+              position: 'absolute',
+              ...(orientation === 'landscape' 
+                ? { right: '-24px', top: '50%', transform: 'translateY(-50%)' }
+                : { bottom: '-24px', left: '50%', transform: 'translateX(-50%)' }
+              ),
+              background: '#fff',
+              border: '1px solid #ccc',
+              borderRadius: '4px',
+              padding: '4px',
+              cursor: 'pointer',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              boxShadow: '0 2px 6px rgba(0,0,0,0.1)',
+              zIndex: 10
+            }}
+            title="Settings"
+          >
+            <Settings size={16} color="#555" />
+          </button>
+        </>
       )}
     </div>
   );
