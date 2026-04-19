@@ -14,7 +14,7 @@
   "scripts": {
     "build": "tsup",
     "dev": "tsup --watch",
-    "demo": "vite examples/react.html --open"
+    "demo": "vite --open /examples/react.html"
   },
   "repository": {
     "type": "git",
